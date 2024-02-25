@@ -54,7 +54,7 @@ namespace CRM_project.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("StudentId,StudentName")] Student student)
+        public async Task<IActionResult> Create([Bind("StudentId,StudentFirstName,StudentSurname,StudentPatronymic,RecordBook")] Student student)
         {
             if (ModelState.IsValid)
             {
@@ -86,7 +86,7 @@ namespace CRM_project.Controllers
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("StudentId,StudentName")] Student student)
+        public async Task<IActionResult> Edit(int id, [Bind("StudentId,StudentFirstName,StudentSurname,StudentPatronymic,RecordBook")] Student student)
         {
             if (id != student.StudentId)
             {
