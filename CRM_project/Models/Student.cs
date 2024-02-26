@@ -11,6 +11,7 @@ namespace CRM_project.Models
         public string StudentPatronymic { get; set;}
         public string RecordBook { get; set;}
 
-        public virtual ICollection<Group> Groups { get; set; }
+        public int GroupId { get; set; }
+        public virtual Group Group { get; set; }
     }
 }

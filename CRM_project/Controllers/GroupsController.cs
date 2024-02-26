@@ -10,23 +10,22 @@ using CRM_project.Models;
 
 namespace CRM_project.Controllers
 {
-    public class StudentsController : Controller
+    public class GroupsController : Controller
     {
         private readonly CRM_projectContext _context;
 
-        public StudentsController(CRM_projectContext context)
+        public GroupsController(CRM_projectContext context)
         {
             _context = context;
         }
 
-        // GET: Students
+        // GET: Groups
         public async Task<IActionResult> Index()
         {
-            var cRM_projectContext = _context.Student.Include(s => s.Group);
-            return View(await cRM_projectContext.ToListAsync());
+            return View(await _context.Group.ToListAsync());
         }
 
-        // GET: Students/Details/5
+        // GET: Groups/Details/5
         public async Task<IActionResult> Details(int? id)
         {
             if (id == null)
@@ -34,42 +33,39 @@ namespace CRM_project.Controllers
                 return NotFound();
             }
 
-            var student = await _context.Student
-                .Include(s => s.Group)
-                .FirstOrDefaultAsync(m => m.StudentId == id);
-            if (student == null)
+            var @group = await _context.Group
+                .FirstOrDefaultAsync(m => m.GroupId == id);
+            if (@group == null)
             {
                 return NotFound();
             }
 
-            return View(student);
+            return View(@group);
         }
 
-        // GET: Students/Create
+        // GET: Groups/Create
         public IActionResult Create()
         {
-            ViewData["GroupId"] = new SelectList(_context.Group, "GroupId", "GroupId");
             return View();
         }
 
-        // POST: Students/Create
+        // POST: Groups/Create
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Create([Bind("StudentId,StudentFirstName,StudentSurname,StudentPatronymic,RecordBook,GroupId")] Student student)
+        public async Task<IActionResult> Create([Bind("GroupId,GroupName")] Group @group)
         {
             if (ModelState.IsValid)
             {
-                _context.Add(student);
+                _context.Add(@group);
                 await _context.SaveChangesAsync();
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["GroupId"] = new SelectList(_context.Group, "GroupId", "GroupId", student.GroupId);
-            return View(student);
+            return View(@group);
         }
 
-        // GET: Students/Edit/5
+        // GET: Groups/Edit/5
         public async Task<IActionResult> Edit(int? id)
         {
             if (id == null)
@@ -77,23 +73,22 @@ namespace CRM_project.Controllers
                 return NotFound();
             }
 
-            var student = await _context.Student.FindAsync(id);
-            if (student == null)
+            var @group = await _context.Group.FindAsync(id);
+            if (@group == null)
             {
                 return NotFound();
             }
-            ViewData["GroupId"] = new SelectList(_context.Group, "GroupId", "GroupId", student.GroupId);
-            return View(student);
+            return View(@group);
         }
 
-        // POST: Students/Edit/5
+        // POST: Groups/Edit/5
         // To protect from overposting attacks, enable the specific properties you want to bind to.
         // For more details, see http://go.microsoft.com/fwlink/?LinkId=317598.
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Edit(int id, [Bind("StudentId,StudentFirstName,StudentSurname,StudentPatronymic,RecordBook,GroupId")] Student student)
+        public async Task<IActionResult> Edit(int id, [Bind("GroupId,GroupName")] Group @group)
         {
-            if (id != student.StudentId)
+            if (id != @group.GroupId)
             {
                 return NotFound();
             }
@@ -102,12 +97,12 @@ namespace CRM_project.Controllers
             {
                 try
                 {
-                    _context.Update(student);
+                    _context.Update(@group);
                     await _context.SaveChangesAsync();
                 }
                 catch (DbUpdateConcurrencyException)
                 {
-                    if (!StudentExists(student.StudentId))
+                    if (!GroupExists(@group.GroupId))
                     {
                         return NotFound();
                     }
@@ -118,11 +113,10 @@ namespace CRM_project.Controllers
                 }
                 return RedirectToAction(nameof(Index));
             }
-            ViewData["GroupId"] = new SelectList(_context.Group, "GroupId", "GroupId", student.GroupId);
-            return View(student);
+            return View(@group);
         }
 
-        // GET: Students/Delete/5
+        // GET: Groups/Delete/5
         public async Task<IActionResult> Delete(int? id)
         {
             if (id == null)
@@ -130,35 +124,34 @@ namespace CRM_project.Controllers
                 return NotFound();
             }
 
-            var student = await _context.Student
-                .Include(s => s.Group)
-                .FirstOrDefaultAsync(m => m.StudentId == id);
-            if (student == null)
+            var @group = await _context.Group
+                .FirstOrDefaultAsync(m => m.GroupId == id);
+            if (@group == null)
             {
                 return NotFound();
             }
 
-            return View(student);
+            return View(@group);
         }
 
-        // POST: Students/Delete/5
+        // POST: Groups/Delete/5
         [HttpPost, ActionName("Delete")]
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> DeleteConfirmed(int id)
         {
-            var student = await _context.Student.FindAsync(id);
-            if (student != null)
+            var @group = await _context.Group.FindAsync(id);
+            if (@group != null)
             {
-                _context.Student.Remove(student);
+                _context.Group.Remove(@group);
             }
 
             await _context.SaveChangesAsync();
             return RedirectToAction(nameof(Index));
         }
 
-        private bool StudentExists(int id)
+        private bool GroupExists(int id)
         {
-            return _context.Student.Any(e => e.StudentId == id);
+            return _context.Group.Any(e => e.GroupId == id);
         }
     }
 }
